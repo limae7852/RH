@@ -305,10 +305,10 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Folha de Pagamento</h2>
                         <div class="flex space-x-4">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <button onclick="exportPayroll()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-file-export mr-2"></i> Exportar
                             </button>
-                            <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <button onclick="showPayrollProcessModal()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-calculator mr-2"></i> Processar Folha
                             </button>
                         </div>
@@ -542,7 +542,7 @@
                 <div id="vacations-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gerenciamento de Férias</h2>
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                        <button onclick="showVacationModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
                             <i class="fas fa-plus mr-2"></i> Solicitar Férias
                         </button>
                     </div>
@@ -603,8 +603,8 @@
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Pendente</span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="#" class="text-green-600 hover:text-green-900 mr-3">Aprovar</a>
-                                                <a href="#" class="text-red-600 hover:text-red-900">Recusar</a>
+                                                <a href="#" onclick="approveVacation()" class="text-green-600 hover:text-green-900 mr-3">Aprovar</a>
+                                                <a href="#" onclick="rejectVacation()" class="text-red-600 hover:text-red-900">Recusar</a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -915,6 +915,110 @@
     </div>
 
     <!-- Employee Modal -->
+    <!-- Vacation Request Modal -->
+    <div id="vacation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Solicitar Férias</h3>
+                <button onclick="hideVacationModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Funcionário</label>
+                        <select class="border rounded px-3 py-2 w-full">
+                            <option>Carlos Silva</option>
+                            <option>Ana Souza</option>
+                            <option>Roberto Almeida</option>
+                            <option>Mariana Costa</option>
+                            <option>Pedro Santos</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+                            <input type="date" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Fim</label>
+                            <input type="date" class="border rounded px-3 py-2 w-full">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Férias</label>
+                        <select class="border rounded px-3 py-2 w-full">
+                            <option>Férias Anuais</option>
+                            <option>Férias Coletivas</option>
+                            <option>Férias Antecipadas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Observações</label>
+                        <textarea class="border rounded px-3 py-2 w-full" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button onclick="hideVacationModal()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">
+                        Cancelar
+                    </button>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                        Enviar Solicitação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Payroll Modal -->
+    <div id="payroll-process-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Processar Folha de Pagamento</h3>
+                <button onclick="hidePayrollProcessModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mês/Ano</label>
+                        <input type="month" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Data de Pagamento</label>
+                        <input type="date" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Processamento</label>
+                        <select class="border rounded px-3 py-2 w-full">
+                            <option>Folha Completa</option>
+                            <option>Adiantamento</option>
+                            <option>13º Salário</option>
+                            <option>Férias</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="include-benefits" class="mr-2">
+                        <label for="include-benefits" class="text-sm text-gray-700">Incluir benefícios</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="include-taxes" class="mr-2" checked>
+                        <label for="include-taxes" class="text-sm text-gray-700">Incluir descontos de impostos</label>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button onclick="hidePayrollProcessModal()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">
+                        Cancelar
+                    </button>
+                    <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+                        Processar Folha
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="employee-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-y-auto">
             <div class="px-6 py-4 border-b flex justify-between items-center">
@@ -1334,6 +1438,52 @@
         // Hide employee modal
         function hideEmployeeModal() {
             document.getElementById('employee-modal').classList.add('hidden');
+        }
+
+        // Vacation modal functions
+        function showVacationModal() {
+            document.getElementById('vacation-modal').classList.remove('hidden');
+        }
+
+        function hideVacationModal() {
+            document.getElementById('vacation-modal').classList.add('hidden');
+        }
+
+        // Payroll process modal functions
+        function showPayrollProcessModal() {
+            document.getElementById('payroll-process-modal').classList.remove('hidden');
+        }
+
+        function hidePayrollProcessModal() {
+            document.getElementById('payroll-process-modal').classList.add('hidden');
+        }
+
+        // Export functions
+        function exportReport() {
+            alert('Relatório exportado com sucesso!');
+        }
+
+        function exportPayroll() {
+            alert('Folha de pagamento exportada com sucesso!');
+        }
+
+        // Approve/Reject functions
+        function approveVacation() {
+            alert('Férias aprovadas com sucesso!');
+        }
+
+        function rejectVacation() {
+            if(confirm('Tem certeza que deseja rejeitar esta solicitação de férias?')) {
+                alert('Solicitação de férias rejeitada!');
+            }
+        }
+
+        // Process payroll
+        function processPayroll() {
+            if(confirm('Deseja processar a folha de pagamento para o mês selecionado?')) {
+                alert('Folha de pagamento processada com sucesso!');
+                hidePayrollProcessModal();
+            }
         }
     </script>
 </body>
