@@ -368,7 +368,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Avaliação de Desempenho</h2>
                         <div class="flex space-x-4">
-                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <button onclick="showPerformanceModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
                                 <i class="fas fa-plus mr-2"></i> Nova Avaliação
                             </button>
                         </div>
@@ -1107,6 +1107,54 @@
             </div>
         </div>
     </div>
+    
+    <div id="performance-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-xl max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b flex justify-between items-center">
+                <h3 class="text-xl font-semibold">Nova Avaliação de Desempenho</h3>
+                <button onclick="hidePerformanceModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Funcionário</label>
+                        <select id="evaluation-employee" class="border rounded px-3 py-2 w-full">
+                            <option value="">Selecione um funcionário</option>
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Avaliador</label>
+                        <select id="evaluation-reviewer" class="border rounded px-3 py-2 w-full">
+                            <option value="">Selecione o avaliador</option>
+                            </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nota (0-10)</label>
+                        <input type="number" id="evaluation-score" min="0" max="10" step="0.1" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Data da Avaliação</label>
+                        <input type="date" id="evaluation-date" class="border rounded px-3 py-2 w-full">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Feedback Detalhado</label>
+                        <textarea id="evaluation-feedback" class="border rounded px-3 py-2 w-full" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button onclick="hidePerformanceModal()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">
+                        Cancelar
+                    </button>
+                    <button onclick="savePerformanceEvaluation()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                        Salvar Avaliação
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -1260,13 +1308,34 @@
             netSalary: "R$ 5.500,00",
             status: "Pendente"
         }];
-
-        // Initialize charts when DOM is loaded
+        
+        // Sample data for performance evaluations
+        let performanceEvaluations = [{
+            id: 1,
+            employee: "Carlos Silva",
+            employeeId: 1,
+            position: "Desenvolvedor Sênior",
+            reviewer: "Roberto Almeida",
+            reviewDate: "15/01/2023",
+            score: 8.5,
+            feedback: "Excelente desempenho no projeto X, demonstrou grande capacidade técnica e liderança."
+        }, {
+            id: 2,
+            employee: "Ana Souza",
+            employeeId: 2,
+            position: "Analista de RH",
+            reviewer: "Admin",
+            reviewDate: "20/07/2023",
+            score: 7.2,
+            feedback: "Bom trabalho na organização dos novos processos de contratação. Pode melhorar a comunicação em equipe."
+        }];
+        
+        // Initialize functions when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             loadEmployees();
             loadPayroll();
+            loadPerformanceEvaluations();
             initCharts();
-            // Initial call to set the first menu item as active
             document.querySelector('.menu-item').classList.add('bg-blue-700');
         });
 
@@ -1358,6 +1427,47 @@
             });
         }
 
+        // Load performance evaluations data into table
+        function loadPerformanceEvaluations() {
+            const tableBody = document.querySelector('#performance-section .bg-white.divide-y.divide-gray-200');
+            tableBody.innerHTML = '';
+
+            performanceEvaluations.forEach(evaluation => {
+                const row = document.createElement('tr');
+                const scoreClass = evaluation.score >= 8 ? 'bg-green-100 text-green-800' : 
+                                   evaluation.score >= 6 ? 'bg-blue-100 text-blue-800' : 
+                                   evaluation.score >= 4 ? 'bg-yellow-100 text-yellow-800' : 
+                                   'bg-red-100 text-red-800';
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10">
+                                <img class="h-10 w-10 rounded-full" src="${employees.find(e => e.id === evaluation.employeeId)?.photo}" alt="">
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${evaluation.employee}</div>
+                                <div class="text-sm text-gray-500">${employees.find(e => e.id === evaluation.employeeId)?.department}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${evaluation.reviewDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${evaluation.reviewer}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${scoreClass}">
+                            ${evaluation.score}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">${evaluation.feedback}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
+                        <a href="#" onclick="deletePerformanceEvaluation(${evaluation.id})" class="text-red-600 hover:text-red-900">Excluir</a>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
         // Initialize charts
         function initCharts() {
             // Hiring Chart
@@ -1424,15 +1534,12 @@
 
         // Show/hide sections
         function showSection(sectionId) {
-            // Hide all sections
             document.querySelectorAll('.section-content').forEach(section => {
                 section.classList.add('hidden');
             });
             
-            // Show selected section
             document.getElementById(`${sectionId}-section`).classList.remove('hidden');
             
-            // Update page title
             const titles = {
                 'dashboard': 'Dashboard',
                 'employees': 'Funcionários',
@@ -1444,7 +1551,6 @@
             };
             document.getElementById('page-title').textContent = titles[sectionId];
 
-            // Update active menu item
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('bg-blue-700');
             });
@@ -1458,20 +1564,16 @@
 
         // Change report tab
         function changeReportTab(tabId) {
-            // Remove active class from all tabs
             document.querySelectorAll('#reports-section button').forEach(tab => {
                 tab.classList.remove('active-tab');
             });
             
-            // Add active class to clicked tab
             event.target.classList.add('active-tab');
             
-            // Hide all report tabs
             document.querySelectorAll('.report-tab').forEach(tab => {
                 tab.classList.add('hidden');
             });
             
-            // Show selected tab
             document.getElementById(`${tabId}-report`).classList.remove('hidden');
         }
 
@@ -1525,7 +1627,6 @@
             const hireDate = document.getElementById('employee-hire-date').value;
 
             if (id) {
-                // Update existing employee
                 const employeeIndex = employees.findIndex(emp => emp.id == id);
                 if (employeeIndex > -1) {
                     employees[employeeIndex] = {
@@ -1534,12 +1635,10 @@
                         department: department,
                         position: position,
                         hireDate: hireDate.split('-').reverse().join('/'),
-                        // Add other fields as needed
                     };
                     alert('Funcionário atualizado com sucesso!');
                 }
             } else {
-                // Add new employee
                 const newEmployee = {
                     id: employees.length + 1,
                     name: name,
@@ -1547,15 +1646,14 @@
                     position: position,
                     hireDate: hireDate.split('-').reverse().join('/'),
                     status: 'Ativo',
-                    photo: "https://randomuser.me/api/portraits/men/99.jpg", // A placeholder image
-                    // Add other fields from the form
+                    photo: "https://randomuser.me/api/portraits/men/99.jpg",
                 };
                 employees.push(newEmployee);
                 alert('Novo funcionário adicionado com sucesso!');
             }
 
             hideEmployeeModal();
-            loadEmployees(); // Reload the table with updated data
+            loadEmployees();
         }
 
         // Edit employee
@@ -1570,7 +1668,7 @@
         function deleteEmployee(id) {
             if (confirm('Tem certeza que deseja excluir este funcionário?')) {
                 employees = employees.filter(emp => emp.id !== id);
-                loadEmployees(); // Reload the table
+                loadEmployees();
                 alert('Funcionário excluído com sucesso!');
             }
         }
@@ -1591,6 +1689,75 @@
 
         function hidePayrollProcessModal() {
             document.getElementById('payroll-process-modal').classList.add('hidden');
+        }
+
+        // Performance modal functions
+        function showPerformanceModal() {
+            const employeeSelect = document.getElementById('evaluation-employee');
+            const reviewerSelect = document.getElementById('evaluation-reviewer');
+            
+            // Clear previous options
+            employeeSelect.innerHTML = '<option value="">Selecione um funcionário</option>';
+            reviewerSelect.innerHTML = '<option value="">Selecione o avaliador</option>';
+
+            // Populate employee options
+            employees.forEach(employee => {
+                const option = document.createElement('option');
+                option.value = employee.id;
+                option.textContent = employee.name;
+                employeeSelect.appendChild(option);
+            });
+
+            // Populate reviewer options (can be managers, HR, etc. For this example, we use a simple list)
+            ['Admin', 'Roberto Almeida', 'Ana Souza'].forEach(reviewer => {
+                const option = document.createElement('option');
+                option.value = reviewer;
+                option.textContent = reviewer;
+                reviewerSelect.appendChild(option);
+            });
+
+            document.getElementById('performance-modal').classList.remove('hidden');
+        }
+
+        function hidePerformanceModal() {
+            document.getElementById('performance-modal').classList.add('hidden');
+        }
+
+        function savePerformanceEvaluation() {
+            const employeeId = document.getElementById('evaluation-employee').value;
+            const reviewer = document.getElementById('evaluation-reviewer').value;
+            const score = document.getElementById('evaluation-score').value;
+            const feedback = document.getElementById('evaluation-feedback').value;
+
+            if (!employeeId || !reviewer || !score || !feedback) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            const employee = employees.find(emp => emp.id == employeeId);
+            const newEvaluation = {
+                id: performanceEvaluations.length + 1,
+                employee: employee.name,
+                employeeId: employee.id,
+                position: employee.position,
+                reviewer: reviewer,
+                reviewDate: new Date().toLocaleDateString('pt-BR'),
+                score: parseFloat(score),
+                feedback: feedback
+            };
+
+            performanceEvaluations.push(newEvaluation);
+            alert('Nova avaliação de desempenho salva com sucesso!');
+            hidePerformanceModal();
+            loadPerformanceEvaluations();
+        }
+
+        function deletePerformanceEvaluation(id) {
+            if (confirm('Tem certeza que deseja excluir esta avaliação de desempenho?')) {
+                performanceEvaluations = performanceEvaluations.filter(eval => eval.id !== id);
+                loadPerformanceEvaluations();
+                alert('Avaliação excluída com sucesso!');
+            }
         }
 
         // Export functions
