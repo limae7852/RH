@@ -430,29 +430,6 @@
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200" id="pending-evaluations-table-body">
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="flex items-center">
-                                                    <div class="flex-shrink-0 h-10 w-10">
-                                                        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
-                                                    </div>
-                                                    <div class="ml-4">
-                                                        <div class="text-sm font-medium text-gray-900">Carlos Silva</div>
-                                                        <div class="text-sm text-gray-500">TI</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm text-gray-900">Desenvolvedor Sênior</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">8.5</span>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15/07/2023</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="#" class="text-blue-600 hover:text-blue-900">Avaliar</a>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1148,7 +1125,6 @@
         </div>
     </div>
 
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Sample data for employees
@@ -1323,11 +1299,30 @@
             feedback: "Bom trabalho na organização dos novos processos de contratação. Pode melhorar a comunicação em equipe."
         }];
         
+        // Sample data for pending evaluations
+        let pendingEvaluations = [{
+            id: 1,
+            employeeId: 1,
+            lastEvaluationDate: "15/01/2023",
+            nextEvaluationDate: "15/07/2024"
+        }, {
+            id: 2,
+            employeeId: 2,
+            lastEvaluationDate: "20/07/2023",
+            nextEvaluationDate: "20/01/2025"
+        }, {
+            id: 3,
+            employeeId: 3,
+            lastEvaluationDate: "10/05/2024",
+            nextEvaluationDate: "10/11/2025"
+        }];
+
         // Initialize functions when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             loadEmployees();
             loadPayroll();
             loadPerformanceEvaluations();
+            loadPendingEvaluations();
             initCharts();
             document.querySelector('.menu-item').classList.add('bg-blue-700');
         });
@@ -1460,6 +1455,45 @@
             });
         }
 
+        // Load pending evaluations data into table
+        function loadPendingEvaluations() {
+            const tableBody = document.getElementById('pending-evaluations-table-body');
+            tableBody.innerHTML = '';
+
+            pendingEvaluations.forEach(pendingEval => {
+                const employee = employees.find(emp => emp.id === pendingEval.employeeId);
+                if (employee) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="${employee.photo}" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${employee.name}</div>
+                                    <div class="text-sm text-gray-500">${employee.department}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">${employee.position}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${pendingEval.lastEvaluationDate}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${pendingEval.nextEvaluationDate}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="showPendingEvaluationModal(${employee.id})" class="text-blue-600 hover:text-blue-900">Avaliar</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+
         // Initialize charts
         function initCharts() {
             // Hiring Chart
@@ -1547,6 +1581,11 @@
                 item.classList.remove('bg-blue-700');
             });
             document.querySelector(`.menu-item[onclick="showSection('${sectionId}')"]`).classList.add('bg-blue-700');
+
+            if (sectionId === 'performance') {
+                loadPendingEvaluations();
+                loadPerformanceEvaluations();
+            }
         }
 
         // Toggle sidebar
@@ -1706,6 +1745,12 @@
             });
 
             document.getElementById('performance-modal').classList.remove('hidden');
+        }
+        
+        // Show modal for pending evaluation with pre-selected employee
+        function showPendingEvaluationModal(employeeId) {
+            showPerformanceModal();
+            document.getElementById('evaluation-employee').value = employeeId;
         }
 
         function hidePerformanceModal() {
