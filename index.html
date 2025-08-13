@@ -35,7 +35,6 @@
 </head>
 <body class="bg-gray-100 font-sans">
     <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
         <div class="sidebar bg-blue-800 text-white w-64 flex flex-col">
             <div class="p-4 flex items-center space-x-2">
                 <i class="fas fa-user-tie text-2xl"></i>
@@ -87,9 +86,7 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="flex-1 overflow-auto">
-            <!-- Top Navigation -->
             <header class="bg-white shadow-sm">
                 <div class="flex justify-between items-center px-6 py-4">
                     <div class="flex items-center">
@@ -113,9 +110,7 @@
                 </div>
             </header>
 
-            <!-- Page Content -->
             <main class="p-6">
-                <!-- Dashboard Section -->
                 <div id="dashboard-section" class="section-content">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <div class="bg-white rounded-lg shadow p-6">
@@ -241,7 +236,6 @@
                     </div>
                 </div>
 
-                <!-- Employees Section -->
                 <div id="employees-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Funcionários</h2>
@@ -281,8 +275,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200" id="employees-table-body">
-                                    <!-- Employee data will be loaded here -->
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                         <div class="px-6 py-4 border-t flex justify-between items-center">
@@ -300,7 +293,6 @@
                     </div>
                 </div>
 
-                <!-- Payroll Section -->
                 <div id="payroll-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Folha de Pagamento</h2>
@@ -354,8 +346,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200" id="payroll-table-body">
-                                    <!-- Payroll data will be loaded here -->
-                                </tbody>
+                                    </tbody>
                             </table>
                         </div>
                         <div class="px-6 py-4 border-t flex justify-between items-center">
@@ -373,7 +364,6 @@
                     </div>
                 </div>
 
-                <!-- Performance Section -->
                 <div id="performance-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Avaliação de Desempenho</h2>
@@ -538,7 +528,6 @@
                     </div>
                 </div>
 
-                <!-- Vacations Section -->
                 <div id="vacations-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Gerenciamento de Férias</h2>
@@ -654,7 +643,6 @@
                     </div>
                 </div>
 
-                <!-- Reports Section -->
                 <div id="reports-section" class="section-content hidden">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-semibold">Relatórios</h2>
@@ -700,6 +688,7 @@
                                         <option>TI</option>
                                         <option>RH</option>
                                         <option>Financeiro</option>
+                                        <option>Marketing</option>
                                     </select>
                                     <select class="border rounded px-3 py-2">
                                         <option>Todos Cargos</option>
@@ -794,7 +783,6 @@
                     </div>
                 </div>
 
-                <!-- Settings Section -->
                 <div id="settings-section" class="section-content hidden">
                     <h2 class="text-2xl font-semibold mb-6">Configurações do Sistema</h2>
 
@@ -914,8 +902,109 @@
         </div>
     </div>
 
-    <!-- Employee Modal -->
-    <!-- Vacation Request Modal -->
+    <div id="employee-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-y-auto">
+            <div class="px-6 py-4 border-b flex justify-between items-center">
+                <h3 class="text-xl font-semibold" id="employee-modal-title">Adicionar Novo Funcionário</h3>
+                <button onclick="hideEmployeeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="employee-form" onsubmit="saveEmployee(event)">
+                    <input type="hidden" id="employee-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
+                            <input type="text" id="employee-name" class="border rounded px-3 py-2 w-full" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">CPF</label>
+                            <input type="text" id="employee-cpf" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">RG</label>
+                            <input type="text" id="employee-rg" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data de Nascimento</label>
+                            <input type="date" id="employee-dob" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gênero</label>
+                            <select id="employee-gender" class="border rounded px-3 py-2 w-full">
+                                <option>Masculino</option>
+                                <option>Feminino</option>
+                                <option>Outro</option>
+                                <option>Prefiro não informar</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Estado Civil</label>
+                            <select id="employee-marital-status" class="border rounded px-3 py-2 w-full">
+                                <option>Solteiro(a)</option>
+                                <option>Casado(a)</option>
+                                <option>Divorciado(a)</option>
+                                <option>Viúvo(a)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+                            <input type="email" id="employee-email" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                            <input type="tel" id="employee-phone" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Departamento</label>
+                            <select id="employee-department" class="border rounded px-3 py-2 w-full">
+                                <option>TI</option>
+                                <option>RH</option>
+                                <option>Financeiro</option>
+                                <option>Marketing</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
+                            <select id="employee-position" class="border rounded px-3 py-2 w-full">
+                                <option>Desenvolvedor</option>
+                                <option>Analista de Sistemas</option>
+                                <option>Gerente de Projetos</option>
+                                <option>Analista de RH</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Data de Admissão</label>
+                            <input type="date" id="employee-hire-date" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Salário Base</label>
+                            <input type="text" id="employee-salary" class="border rounded px-3 py-2 w-full">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
+                            <input type="text" id="employee-address" class="border rounded px-3 py-2 w-full mb-2" placeholder="Rua, número">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <input type="text" id="employee-complement" class="border rounded px-3 py-2" placeholder="Complemento">
+                                <input type="text" id="employee-city" class="border rounded px-3 py-2" placeholder="Cidade">
+                                <input type="text" id="employee-state" class="border rounded px-3 py-2" placeholder="Estado">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button type="button" onclick="hideEmployeeModal()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg" id="save-employee-button">
+                            Salvar Funcionário
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="vacation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
             <div class="px-6 py-4 border-b flex justify-between items-center">
@@ -971,7 +1060,6 @@
         </div>
     </div>
 
-    <!-- Process Payroll Modal -->
     <div id="payroll-process-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-screen overflow-y-auto">
             <div class="px-6 py-4 border-b flex justify-between items-center">
@@ -1019,216 +1107,167 @@
             </div>
         </div>
     </div>
-    <div id="employee-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-screen overflow-y-auto">
-            <div class="px-6 py-4 border-b flex justify-between items-center">
-                <h3 class="text-xl font-semibold">Adicionar Novo Funcionário</h3>
-                <button onclick="hideEmployeeModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                        <input type="text" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">CPF</label>
-                        <input type="text" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">RG</label>
-                        <input type="text" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Data de Nascimento</label>
-                        <input type="date" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Gênero</label>
-                        <select class="border rounded px-3 py-2 w-full">
-                            <option>Masculino</option>
-                            <option>Feminino</option>
-                            <option>Outro</option>
-                            <option>Prefiro não informar</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Estado Civil</label>
-                        <select class="border rounded px-3 py-2 w-full">
-                            <option>Solteiro(a)</option>
-                            <option>Casado(a)</option>
-                            <option>Divorciado(a)</option>
-                            <option>Viúvo(a)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                        <input type="email" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
-                        <input type="tel" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Departamento</label>
-                        <select class="border rounded px-3 py-2 w-full">
-                            <option>TI</option>
-                            <option>RH</option>
-                            <option>Financeiro</option>
-                            <option>Marketing</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Cargo</label>
-                        <select class="border rounded px-3 py-2 w-full">
-                            <option>Desenvolvedor</option>
-                            <option>Analista de Sistemas</option>
-                            <option>Gerente de Projetos</option>
-                            <option>Analista de RH</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Data de Admissão</label>
-                        <input type="date" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Salário Base</label>
-                        <input type="text" class="border rounded px-3 py-2 w-full">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Endereço</label>
-                        <input type="text" class="border rounded px-3 py-2 w-full mb-2" placeholder="Rua, número">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <input type="text" class="border rounded px-3 py-2" placeholder="Complemento">
-                            <input type="text" class="border rounded px-3 py-2" placeholder="Cidade">
-                            <input type="text" class="border rounded px-3 py-2" placeholder="Estado">
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-6 flex justify-end space-x-3">
-                    <button onclick="hideEmployeeModal()" class="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg">
-                        Cancelar
-                    </button>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                        Salvar Funcionário
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Sample data for employees
-        const employees = [
-            {
-                id: 1,
-                name: "Carlos Silva",
-                position: "Desenvolvedor Sênior",
-                department: "TI",
-                hireDate: "15/01/2020",
-                status: "Ativo",
-                photo: "https://randomuser.me/api/portraits/men/32.jpg"
-            },
-            {
-                id: 2,
-                name: "Ana Souza",
-                position: "Analista de RH",
-                department: "RH",
-                hireDate: "20/03/2021",
-                status: "Ativo",
-                photo: "https://randomuser.me/api/portraits/women/44.jpg"
-            },
-            {
-                id: 3,
-                name: "Roberto Almeida",
-                position: "Gerente Financeiro",
-                department: "Financeiro",
-                hireDate: "10/05/2019",
-                status: "Ativo",
-                photo: "https://randomuser.me/api/portraits/men/22.jpg"
-            },
-            {
-                id: 4,
-                name: "Mariana Costa",
-                position: "Designer",
-                department: "Marketing",
-                hireDate: "05/07/2022",
-                status: "Ativo",
-                photo: "https://randomuser.me/api/portraits/women/65.jpg"
-            },
-            {
-                id: 5,
-                name: "Pedro Santos",
-                position: "Analista de Sistemas",
-                department: "TI",
-                hireDate: "12/11/2021",
-                status: "Ativo",
-                photo: "https://randomuser.me/api/portraits/men/45.jpg"
-            }
-        ];
+        let employees = [{
+            id: 1,
+            name: "Carlos Silva",
+            position: "Desenvolvedor Sênior",
+            department: "TI",
+            hireDate: "15/01/2020",
+            status: "Ativo",
+            photo: "https://randomuser.me/api/portraits/men/32.jpg",
+            cpf: "123.456.789-00",
+            rg: "987654321",
+            dob: "1985-05-20",
+            gender: "Masculino",
+            maritalStatus: "Casado(a)",
+            email: "carlos.silva@exemplo.com",
+            phone: "(11) 98765-4321",
+            address: "Rua das Flores, 123",
+            complement: "Apto 101",
+            city: "São Paulo",
+            state: "SP",
+            salary: "R$ 8.500,00"
+        }, {
+            id: 2,
+            name: "Ana Souza",
+            position: "Analista de RH",
+            department: "RH",
+            hireDate: "20/03/2021",
+            status: "Ativo",
+            photo: "https://randomuser.me/api/portraits/women/44.jpg",
+            cpf: "111.222.333-44",
+            rg: "123456789",
+            dob: "1990-10-15",
+            gender: "Feminino",
+            maritalStatus: "Solteiro(a)",
+            email: "ana.souza@exemplo.com",
+            phone: "(11) 91234-5678",
+            address: "Avenida Principal, 456",
+            complement: "",
+            city: "Campinas",
+            state: "SP",
+            salary: "R$ 4.200,00"
+        }, {
+            id: 3,
+            name: "Roberto Almeida",
+            position: "Gerente Financeiro",
+            department: "Financeiro",
+            hireDate: "10/05/2019",
+            status: "Ativo",
+            photo: "https://randomuser.me/api/portraits/men/22.jpg",
+            cpf: "444.555.666-77",
+            rg: "111222333",
+            dob: "1980-02-28",
+            gender: "Masculino",
+            maritalStatus: "Casado(a)",
+            email: "roberto.almeida@exemplo.com",
+            phone: "(11) 95555-4444",
+            address: "Praça da Matriz, 789",
+            complement: "Sala 5",
+            city: "Rio de Janeiro",
+            state: "RJ",
+            salary: "R$ 12.000,00"
+        }, {
+            id: 4,
+            name: "Mariana Costa",
+            position: "Designer",
+            department: "Marketing",
+            hireDate: "05/07/2022",
+            status: "Ativo",
+            photo: "https://randomuser.me/api/portraits/women/65.jpg",
+            cpf: "777.888.999-11",
+            rg: "444555666",
+            dob: "1995-03-12",
+            gender: "Feminino",
+            maritalStatus: "Solteiro(a)",
+            email: "mariana.costa@exemplo.com",
+            phone: "(21) 98765-1234",
+            address: "Rua do Sol, 321",
+            complement: "",
+            city: "Belo Horizonte",
+            state: "MG",
+            salary: "R$ 5.500,00"
+        }, {
+            id: 5,
+            name: "Pedro Santos",
+            position: "Analista de Sistemas",
+            department: "TI",
+            hireDate: "12/11/2021",
+            status: "Ativo",
+            photo: "https://randomuser.me/api/portraits/men/45.jpg",
+            cpf: "000.111.222-33",
+            rg: "777888999",
+            dob: "1992-09-01",
+            gender: "Masculino",
+            maritalStatus: "Solteiro(a)",
+            email: "pedro.santos@exemplo.com",
+            phone: "(31) 99999-8888",
+            address: "Avenida Brasil, 987",
+            complement: "Bloco B",
+            city: "Salvador",
+            state: "BA",
+            salary: "R$ 6.000,00"
+        }];
 
         // Sample data for payroll
-        const payroll = [
-            {
-                id: 1,
-                employee: "Carlos Silva",
-                position: "Desenvolvedor Sênior",
-                baseSalary: "R$ 8.500,00",
-                overtime: "R$ 1.200,00",
-                discounts: "R$ 1.800,00",
-                netSalary: "R$ 7.900,00",
-                status: "Pago"
-            },
-            {
-                id: 2,
-                employee: "Ana Souza",
-                position: "Analista de RH",
-                baseSalary: "R$ 4.200,00",
-                overtime: "R$ 300,00",
-                discounts: "R$ 900,00",
-                netSalary: "R$ 3.600,00",
-                status: "Pago"
-            },
-            {
-                id: 3,
-                employee: "Roberto Almeida",
-                position: "Gerente Financeiro",
-                baseSalary: "R$ 12.000,00",
-                overtime: "R$ 0,00",
-                discounts: "R$ 2.700,00",
-                netSalary: "R$ 9.300,00",
-                status: "Pago"
-            },
-            {
-                id: 4,
-                employee: "Mariana Costa",
-                position: "Designer",
-                baseSalary: "R$ 5.500,00",
-                overtime: "R$ 500,00",
-                discounts: "R$ 1.200,00",
-                netSalary: "R$ 4.800,00",
-                status: "Pago"
-            },
-            {
-                id: 5,
-                employee: "Pedro Santos",
-                position: "Analista de Sistemas",
-                baseSalary: "R$ 6.000,00",
-                overtime: "R$ 800,00",
-                discounts: "R$ 1.300,00",
-                netSalary: "R$ 5.500,00",
-                status: "Pendente"
-            }
-        ];
+        const payroll = [{
+            id: 1,
+            employee: "Carlos Silva",
+            position: "Desenvolvedor Sênior",
+            baseSalary: "R$ 8.500,00",
+            overtime: "R$ 1.200,00",
+            discounts: "R$ 1.800,00",
+            netSalary: "R$ 7.900,00",
+            status: "Pago"
+        }, {
+            id: 2,
+            employee: "Ana Souza",
+            position: "Analista de RH",
+            baseSalary: "R$ 4.200,00",
+            overtime: "R$ 300,00",
+            discounts: "R$ 900,00",
+            netSalary: "R$ 3.600,00",
+            status: "Pago"
+        }, {
+            id: 3,
+            employee: "Roberto Almeida",
+            position: "Gerente Financeiro",
+            baseSalary: "R$ 12.000,00",
+            overtime: "R$ 0,00",
+            discounts: "R$ 2.700,00",
+            netSalary: "R$ 9.300,00",
+            status: "Pago"
+        }, {
+            id: 4,
+            employee: "Mariana Costa",
+            position: "Designer",
+            baseSalary: "R$ 5.500,00",
+            overtime: "R$ 500,00",
+            discounts: "R$ 1.200,00",
+            netSalary: "R$ 4.800,00",
+            status: "Pago"
+        }, {
+            id: 5,
+            employee: "Pedro Santos",
+            position: "Analista de Sistemas",
+            baseSalary: "R$ 6.000,00",
+            overtime: "R$ 800,00",
+            discounts: "R$ 1.300,00",
+            netSalary: "R$ 5.500,00",
+            status: "Pendente"
+        }];
 
         // Initialize charts when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             loadEmployees();
             loadPayroll();
             initCharts();
+            // Initial call to set the first menu item as active
+            document.querySelector('.menu-item').classList.add('bg-blue-700');
         });
 
         // Load employees data into table
@@ -1265,8 +1304,8 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Editar</a>
-                        <a href="#" class="text-red-600 hover:text-red-900">Excluir</a>
+                        <button onclick="editEmployee(${employee.id})" class="text-blue-600 hover:text-blue-900 mr-3">Editar</button>
+                        <button onclick="deleteEmployee(${employee.id})" class="text-red-600 hover:text-red-900">Excluir</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -1311,7 +1350,7 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Editar</a>
+                        <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Ver Detalhes</a>
                         <a href="#" class="text-red-600 hover:text-red-900">Excluir</a>
                     </td>
                 `;
@@ -1404,6 +1443,12 @@
                 'settings': 'Configurações'
             };
             document.getElementById('page-title').textContent = titles[sectionId];
+
+            // Update active menu item
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('bg-blue-700');
+            });
+            document.querySelector(`.menu-item[onclick="showSection('${sectionId}')"]`).classList.add('bg-blue-700');
         }
 
         // Toggle sidebar
@@ -1431,13 +1476,103 @@
         }
 
         // Show employee modal
-        function showEmployeeModal() {
+        function showEmployeeModal(employee = null) {
+            const modalTitle = document.getElementById('employee-modal-title');
+            const saveButton = document.getElementById('save-employee-button');
+            const form = document.getElementById('employee-form');
+            form.reset();
+
+            if (employee) {
+                modalTitle.textContent = "Editar Funcionário";
+                saveButton.textContent = "Salvar Alterações";
+                document.getElementById('employee-id').value = employee.id;
+                document.getElementById('employee-name').value = employee.name;
+                document.getElementById('employee-cpf').value = employee.cpf;
+                document.getElementById('employee-rg').value = employee.rg;
+                document.getElementById('employee-dob').value = employee.dob;
+                document.getElementById('employee-gender').value = employee.gender;
+                document.getElementById('employee-marital-status').value = employee.maritalStatus;
+                document.getElementById('employee-email').value = employee.email;
+                document.getElementById('employee-phone').value = employee.phone;
+                document.getElementById('employee-department').value = employee.department;
+                document.getElementById('employee-position').value = employee.position;
+                document.getElementById('employee-hire-date').value = employee.hireDate.split('/').reverse().join('-');
+                document.getElementById('employee-salary').value = employee.salary;
+                document.getElementById('employee-address').value = employee.address;
+                document.getElementById('employee-complement').value = employee.complement;
+                document.getElementById('employee-city').value = employee.city;
+                document.getElementById('employee-state').value = employee.state;
+            } else {
+                modalTitle.textContent = "Adicionar Novo Funcionário";
+                saveButton.textContent = "Salvar Funcionário";
+                document.getElementById('employee-id').value = '';
+            }
             document.getElementById('employee-modal').classList.remove('hidden');
         }
 
         // Hide employee modal
         function hideEmployeeModal() {
             document.getElementById('employee-modal').classList.add('hidden');
+        }
+
+        // Save employee data
+        function saveEmployee(event) {
+            event.preventDefault();
+            const id = document.getElementById('employee-id').value;
+            const name = document.getElementById('employee-name').value;
+            const department = document.getElementById('employee-department').value;
+            const position = document.getElementById('employee-position').value;
+            const hireDate = document.getElementById('employee-hire-date').value;
+
+            if (id) {
+                // Update existing employee
+                const employeeIndex = employees.findIndex(emp => emp.id == id);
+                if (employeeIndex > -1) {
+                    employees[employeeIndex] = {
+                        ...employees[employeeIndex],
+                        name: name,
+                        department: department,
+                        position: position,
+                        hireDate: hireDate.split('-').reverse().join('/'),
+                        // Add other fields as needed
+                    };
+                    alert('Funcionário atualizado com sucesso!');
+                }
+            } else {
+                // Add new employee
+                const newEmployee = {
+                    id: employees.length + 1,
+                    name: name,
+                    department: department,
+                    position: position,
+                    hireDate: hireDate.split('-').reverse().join('/'),
+                    status: 'Ativo',
+                    photo: "https://randomuser.me/api/portraits/men/99.jpg", // A placeholder image
+                    // Add other fields from the form
+                };
+                employees.push(newEmployee);
+                alert('Novo funcionário adicionado com sucesso!');
+            }
+
+            hideEmployeeModal();
+            loadEmployees(); // Reload the table with updated data
+        }
+
+        // Edit employee
+        function editEmployee(id) {
+            const employee = employees.find(emp => emp.id === id);
+            if (employee) {
+                showEmployeeModal(employee);
+            }
+        }
+
+        // Delete employee
+        function deleteEmployee(id) {
+            if (confirm('Tem certeza que deseja excluir este funcionário?')) {
+                employees = employees.filter(emp => emp.id !== id);
+                loadEmployees(); // Reload the table
+                alert('Funcionário excluído com sucesso!');
+            }
         }
 
         // Vacation modal functions
@@ -1473,14 +1608,14 @@
         }
 
         function rejectVacation() {
-            if(confirm('Tem certeza que deseja rejeitar esta solicitação de férias?')) {
+            if (confirm('Tem certeza que deseja rejeitar esta solicitação de férias?')) {
                 alert('Solicitação de férias rejeitada!');
             }
         }
 
         // Process payroll
         function processPayroll() {
-            if(confirm('Deseja processar a folha de pagamento para o mês selecionado?')) {
+            if (confirm('Deseja processar a folha de pagamento para o mês selecionado?')) {
                 alert('Folha de pagamento processada com sucesso!');
                 hidePayrollProcessModal();
             }
